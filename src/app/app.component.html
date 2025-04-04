@@ -1,8 +1,9 @@
 <div style="display: flex; flex-direction: row; width: 100vw; gap: 0.5rem">
-  <playing-card suit="hearts" rank="ten" [style]="'display: block;min-height: 10rem;min-width:8rem'"></playing-card>
-  <playing-card suit="hearts" rank="jack" [style]="'display: block;min-height: 10rem;min-width:8rem'"></playing-card>
-  <playing-card suit="hearts" rank="queen" [style]="'display: block;min-height: 10rem;min-width:8rem'"></playing-card>
-  <playing-card suit="hearts" rank="king" [style]="'display: block;min-height: 10rem;min-width:8rem'"></playing-card>
-  <playing-card suit="hearts" rank="ace" [style]="'display: block;min-height: 10rem;min-width:8rem'"></playing-card>
+  <app-playing-card-wrapper [suit]="'hearts'" [rank]="'ace'"></app-playing-card-wrapper>
+  <app-playing-card-wrapper [suit]="'hearts'" [rank]="'two'"></app-playing-card-wrapper>
+  <app-playing-card-wrapper [suit]="'hearts'" [rank]="'three'"></app-playing-card-wrapper>
+  <app-playing-card-wrapper [suit]="'hearts'" [rank]="'four'"></app-playing-card-wrapper>
+  <app-playing-card-wrapper [suit]="'hearts'" [rank]="'five'"></app-playing-card-wrapper>
+  <app-playing-card-wrapper [suit]="'hearts'" [rank]="'king'"></app-playing-card-wrapper>
 </div>
 <router-outlet />
