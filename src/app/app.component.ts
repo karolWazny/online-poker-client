@@ -1,10 +1,12 @@
 import {Component} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {PlayingCardWrapperComponent} from './playing-card-wrapper/playing-card-wrapper.component';
+import {MatToolbar} from '@angular/material/toolbar';
+import {MatIcon} from '@angular/material/icon';
+import {MatIconButton} from '@angular/material/button';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, PlayingCardWrapperComponent],
+  imports: [RouterOutlet, MatToolbar, MatIcon, MatIconButton],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

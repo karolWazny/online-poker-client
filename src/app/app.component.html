@@ -1,9 +1,12 @@
-<div style="display: flex; flex-direction: row; width: 100vw; gap: 0.5rem">
-  <app-playing-card-wrapper [suit]="'hearts'" [rank]="'ace'"></app-playing-card-wrapper>
-  <app-playing-card-wrapper [suit]="'hearts'" [rank]="'two'"></app-playing-card-wrapper>
-  <app-playing-card-wrapper [suit]="'hearts'" [rank]="'three'"></app-playing-card-wrapper>
-  <app-playing-card-wrapper [suit]="'hearts'" [rank]="'four'"></app-playing-card-wrapper>
-  <app-playing-card-wrapper [suit]="'hearts'" [rank]="'five'"></app-playing-card-wrapper>
-  <app-playing-card-wrapper [suit]="'hearts'" [rank]="'king'"></app-playing-card-wrapper>
-</div>
-<router-outlet />
+<mat-toolbar>
+  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>Friendly Little Game of Poker</span>
+  <span class="example-spacer"></span>
+  <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+    <mat-icon>share</mat-icon>
+  </button>
+</mat-toolbar>
+
+<router-outlet/>
