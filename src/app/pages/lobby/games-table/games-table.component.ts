@@ -1,36 +1,40 @@
 import {Component} from '@angular/core';
 import {MatTableModule} from '@angular/material/table';
+import {MatButton} from '@angular/material/button';
 
 export interface PeriodicElement {
+  id: string
   name: string;
-  position: number;
-  weight: number;
-  symbol: string;
+  players: number
+  max_players: number
+  buy_in: number
+  small_blind: number
+  big_blind: number
 }
 
 const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
+  {id: "1", name: 'Friendly Game', players: 1, max_players: 8, buy_in: 1000, big_blind: 50, small_blind: 20},
+  {id: "2", name: 'Unfriendly Game', players: 1, max_players: 8, buy_in: 1000, big_blind: 50, small_blind: 20},
+  {id: "3", name: 'Gangsta', players: 1, max_players: 8, buy_in: 1000, big_blind: 50, small_blind: 20},
+  {id: "4", name: 'Uber-Gangsta', players: 1, max_players: 8, buy_in: 1000, big_blind: 50, small_blind: 20},
+  {id: "5", name: 'Reservoir Dogs', players: 1, max_players: 8, buy_in: 1000, big_blind: 50, small_blind: 20},
+  {id: "6", name: 'Casino Royal', players: 1, max_players: 8, buy_in: 1000, big_blind: 50, small_blind: 20},
+  {id: '7', name: 'Le Chiffre', players: 1, max_players: 8, buy_in: 1000, big_blind: 50, small_blind: 20},
+  {id: '8', name: 'Stajnia', players: 1, max_players: 8, buy_in: 1000, big_blind: 50, small_blind: 20},
+  {id: '9', name: 'Night at the Inventory', players: 1, max_players: 8, buy_in: 1000, big_blind: 50, small_blind: 20},
 ];
 
 
 @Component({
   selector: 'app-games-table',
   imports: [
-    MatTableModule
+    MatTableModule,
+    MatButton
   ],
   templateUrl: './games-table.component.html',
   styleUrl: './games-table.component.scss'
 })
 export class GamesTableComponent {
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+  displayedColumns: string[] = ['id', 'name', 'players', 'blinds', 'buyIn', 'join'];
   dataSource = ELEMENT_DATA;
 }
