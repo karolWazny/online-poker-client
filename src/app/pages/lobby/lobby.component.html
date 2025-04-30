@@ -2,13 +2,13 @@
   <section class="actions-section">
     <button mat-button>New game</button>
   </section>
-  <section class="filters-section">
+  <section class="filters-section" [formGroup]="filtersFormGroup">
     <mat-form-field>
-      <mat-label>Table name</mat-label>
-      <input matInput>
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name">
     </mat-form-field>
   </section>
   <section class="table-section">
-    <app-games-table></app-games-table>
+    <app-games-table [filterFormGroup]="filtersFormGroup"></app-games-table>
   </section>
 </div>

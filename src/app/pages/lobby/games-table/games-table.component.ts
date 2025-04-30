@@ -6,6 +6,8 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {GameInfo} from '../../../api/games/model/game-info';
 import {GamesTableDatasource} from './games-table.datasource';
+import {GamesService} from '../../../api/games/games.service';
+import {FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-games-table',
@@ -19,6 +21,8 @@ import {GamesTableDatasource} from './games-table.datasource';
 })
 export class GamesTableComponent implements OnInit, AfterViewInit {
 
+  @Input('filterFormGroup') filterFormGroup!: FormGroup;
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<GameInfo>;
@@ -26,8 +30,11 @@ export class GamesTableComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['id', 'name', 'players', 'blinds', 'buyIn', 'join'];
   dataSource!: GamesTableDatasource;
 
+  constructor(private gamesService: GamesService) {
+  }
+
   ngOnInit(): void {
-    this.dataSource = new GamesTableDatasource();
+    this.dataSource = new GamesTableDatasource(this.gamesService, this.filterFormGroup);
   }
 
   ngAfterViewInit(): void {
