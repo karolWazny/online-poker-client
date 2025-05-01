@@ -1,22 +1,15 @@
 import {DataSource} from '@angular/cdk/collections';
 import {GameInfo} from '../../../api/games/model/game-info';
-import {BehaviorSubject, catchError, debounceTime, merge, Observable, of, switchMap, tap} from 'rxjs';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {BehaviorSubject, catchError, debounceTime, map, merge, Observable, of, switchMap, tap} from 'rxjs';
+import {FormGroup} from '@angular/forms';
 import {GamesService} from '../../../api/games/games.service';
+import {MatPaginator} from '@angular/material/paginator';
 
 export class GamesTableDatasource extends DataSource<GameInfo> {
 
-  private dataSubject = new BehaviorSubject<GameInfo[]>([
-    /*{id: "1", name: 'Friendly Game', players: 1, max_players: 8, buy_in: 1000, big_blind: 50, small_blind: 20, min_players: 3},
-    {id: "2", name: 'Unfriendly Game', players: 1, max_players: 8, buy_in: 1000, big_blind: 50, small_blind: 20, min_players: 3},
-    {id: "3", name: 'Gangsta', players: 1, max_players: 8, buy_in: 1000, big_blind: 50, small_blind: 20, min_players: 3},
-    {id: "4", name: 'Uber-Gangsta', players: 1, max_players: 8, buy_in: 1000, big_blind: 50, small_blind: 20, min_players: 3},
-    {id: "5", name: 'Reservoir Dogs', players: 1, max_players: 8, buy_in: 1000, big_blind: 50, small_blind: 20, min_players: 3},
-    {id: "6", name: 'Casino Royal', players: 1, max_players: 8, buy_in: 1000, big_blind: 50, small_blind: 20, min_players: 3},
-    {id: '7', name: 'Le Chiffre', players: 1, max_players: 8, buy_in: 1000, big_blind: 50, small_blind: 20, min_players: 3},
-    {id: '8', name: 'Stajnia', players: 1, max_players: 8, buy_in: 1000, big_blind: 50, small_blind: 20, min_players: 3},
-    {id: '9', name: 'Night at the Inventory', players: 1, max_players: 8, buy_in: 1000, big_blind: 50, small_blind: 30, min_players: 3},*/
-  ]);
+  paginator!: MatPaginator
+
+  private dataSubject = new BehaviorSubject<GameInfo[]>([]);
 
   private onLoad = new BehaviorSubject(true);
 
@@ -25,7 +18,9 @@ export class GamesTableDatasource extends DataSource<GameInfo> {
   }
 
   connect(): Observable<GameInfo[]> {
-    return merge(this.filters.valueChanges.pipe(debounceTime(500)))
+    return merge(this.onLoad,
+      this.filters.valueChanges.pipe(debounceTime(500)),
+      this.paginator.page.asObservable())
       .pipe(
         switchMap(() => this.loadData()),
         catchError(() => {
@@ -41,6 +36,8 @@ export class GamesTableDatasource extends DataSource<GameInfo> {
 
   private loadData() {
     return this.gamesService.getAvailableGames().pipe(
+      tap(response => this.paginator.length = response.items_total),
+      map((response) => response.content),
       tap(response => this.dataSubject.next(response))
     )
   }

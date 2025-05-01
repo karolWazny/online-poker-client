@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {GameInfo} from './model/game-info';
 
 import { environment } from '../../../environments/environment';
+import {RestPage} from '../../model/rest-page';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class GamesService {
   }
 
   public getAvailableGames() {
-    return this.httpClient.get<GameInfo[]>(`${environment.config.url.backendRest}/games`);
+    return this.httpClient.get<RestPage<GameInfo>>(`${environment.config.url.backendRest}/games`);
   }
 
 }
