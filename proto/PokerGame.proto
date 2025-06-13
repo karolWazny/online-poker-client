@@ -19,11 +19,16 @@ message Event {
 
 message GameEvent {
   GameEventType gameEventType = 1;
-  repeated string communityCards = 2;
+  repeated Card communityCards = 2;
 }
 
 message PokerGameHello {
 
+}
+
+message Card {
+  string rank = 1;
+  string suit = 2;
 }
 
 service PokerGameService {

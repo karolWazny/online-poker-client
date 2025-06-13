@@ -1,8 +1,6 @@
 <p>game works!</p>
 <section style="display: flex; flex-direction: row; gap: 0.5rem">
-  <app-playing-card-wrapper style="width: 10rem" [rank]="'king'" [suit]="'hearts'"></app-playing-card-wrapper>
-  <app-playing-card-wrapper style="width: 10rem" [rank]="'king'" [suit]="'clubs'"></app-playing-card-wrapper>
-  <app-playing-card-wrapper style="width: 10rem" [rank]="'king'" [suit]="'spades'"></app-playing-card-wrapper>
-  <app-playing-card-wrapper style="width: 10rem" [rank]="'king'" [suit]="'diamonds'"></app-playing-card-wrapper>
-  <app-playing-card-wrapper style="width: 10rem" [rank]="'ace'" [suit]="'spades'"></app-playing-card-wrapper>
+  @for (card of board; track $index) {
+    <app-playing-card-wrapper style="width: 10rem" [rank]="card.rank" [suit]="card.suit"></app-playing-card-wrapper>
+  }
 </section>
