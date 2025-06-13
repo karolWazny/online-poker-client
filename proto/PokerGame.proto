@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+option go_package = "grpc/game";
+package online.niepowazni.poker;
+
+enum MessageType {
+  EVENT = 0;
+  PING = 1;
+}
+
+enum GameEventType {
+  STREET_UPDATE = 0;
+}
+
+message Event {
+  MessageType metatype = 1;
+  GameEvent eventData = 2;
+}
+
+message GameEvent {
+  GameEventType gameEventType = 1;
+  repeated string communityCards = 2;
+}
+
+message PokerGameHello {
+
+}
+
+service PokerGameService {
+  rpc observeEvents(PokerGameHello) returns (stream Event);
+}

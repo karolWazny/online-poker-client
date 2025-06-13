@@ -6,7 +6,7 @@ import {BehaviorSubject, merge, tap} from 'rxjs';
 import {FormControl, ReactiveFormsModule} from '@angular/forms';
 
 @Component({
-  selector: 'app-game',
+  selector: 'app-playground',
   imports: [
     PlayingCardWrapperComponent,
     MatSlider,
@@ -15,10 +15,10 @@ import {FormControl, ReactiveFormsModule} from '@angular/forms';
     MatSliderThumb,
     ReactiveFormsModule
   ],
-  templateUrl: './game.component.html',
-  styleUrl: './game.component.scss'
+  templateUrl: './playground.component.html',
+  styleUrl: './playground.component.scss'
 })
-export class GameComponent implements AfterViewInit {
+export class PlaygroundComponent implements AfterViewInit {
 
   hueRotate = new FormControl(0);
   negative = new FormControl(0)
