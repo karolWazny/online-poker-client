@@ -5,6 +5,7 @@ import { routes } from './app.routes';
 import {provideHttpClient} from '@angular/common/http';
 import {GrpcCoreModule} from '@ngx-grpc/core';
 import {GrpcWebClientModule} from '@ngx-grpc/grpc-web-client';
+import { provideStore } from '@ngrx/store';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,9 +14,10 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     importProvidersFrom(GrpcCoreModule.forRoot()),
     importProvidersFrom(GrpcWebClientModule.forRoot({
-      settings: {
-        host: 'http://localhost:8080'
-      }
+        settings: {
+            host: 'http://localhost:8080'
+        }
     })),
-  ]
+    provideStore()
+]
 };
