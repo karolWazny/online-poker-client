@@ -4,6 +4,7 @@ import {debounceTime, Subject, Subscription} from 'rxjs';
 import {PokerGameServiceClient} from '../../../proto/poker-game.pbsc';
 import {Event, MessageType, PokerGameHello} from '../../../proto/poker-game.pb';
 import {CardDto} from '../../model/card-dto';
+import {GrpcMetadata} from '@ngx-grpc/common';
 
 @Component({
   selector: 'app-game',
@@ -41,7 +42,9 @@ export class GameComponent implements AfterViewInit, OnDestroy {
 
   private getGameSubscription() {
     console.log('connecting...')
-    this.$gameEventsSubscription =  this.gameServiceClient.observeEvents(new PokerGameHello())
+    let metadata = new GrpcMetadata();
+    metadata.set("Authorization", "Bearer xyz")
+    this.$gameEventsSubscription =  this.gameServiceClient.observeEvents(new PokerGameHello(),metadata)
       .subscribe({
         next: value => this.handleGameEvent(value)
       });
@@ -53,8 +56,10 @@ export class GameComponent implements AfterViewInit, OnDestroy {
     if (value.metatype === MessageType.PING) {
       return;
     }
-    this.board.push({
-      suit: value?.eventData?.communityCards?.[0].suit || 'S', rank: value?.eventData?.communityCards?.[0].rank || '2'
+    value?.eventData?.communityCards?.forEach((card) => {
+      this.board.push({
+        suit: card.suit, rank: card.rank
+      })
     })
   }
 }

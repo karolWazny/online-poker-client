@@ -1,6 +1,5 @@
-<p>game works!</p>
 <section style="display: flex; flex-direction: row; gap: 0.5rem">
-  @for (card of board; track $index) {
+  @for (card of board; track card.rank + card.suit) {
     <app-playing-card-wrapper style="width: 10rem" [rank]="card.rank" [suit]="card.suit"></app-playing-card-wrapper>
   }
 </section>

@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option go_package = "grpc/game";
+package online.niepowazni.poker;
+
+import "PokerCommonModel.proto";
+
+message PokerGameHello {
+
+}
+message GameAction {
+  PlayerActionType type = 1;
+}
+
+message GameActionResponse {
+  GameActionResponseCode code = 1;
+  string description = 2;
+}

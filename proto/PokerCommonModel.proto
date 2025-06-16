@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option go_package = "grpc/game";
+package online.niepowazni.poker;
+
+message Card {
+  string rank = 1;
+  string suit = 2;
+}
+
+enum PlayerTag {
+  FOLDED = 0;
+  ALL_IN = 1;
+}
+
+enum MessageType {
+  PING = 0;
+  EVENT = 1;
+}
+
+enum PlayerActionType {
+  CHECK = 0;
+  FOLD = 1;
+  BET = 2;
+  CALL = 3;
+}
+
+enum GameActionResponseCode {
+  OK = 0;
+}

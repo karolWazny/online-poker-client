@@ -20,6 +20,9 @@ import {
 } from '@ngx-grpc/core';
 import { Observable } from 'rxjs';
 import * as thisProto from './poker-game.pb';
+import * as onlineNiepowazniPoker000 from './poker-common-model.pb';
+import * as onlineNiepowazniPoker001 from './poker-action-model.pb';
+import * as onlineNiepowazniPoker002 from './poker-event-model.pb';
 import { GRPC_POKER_GAME_SERVICE_CLIENT_SETTINGS } from './poker-game.pbconf';
 /**
  * Service client implementation for online.niepowazni.poker.PokerGameService
@@ -39,20 +42,41 @@ export class PokerGameServiceClient {
      *
      * @param requestMessage Request message
      * @param requestMetadata Request metadata
-     * @returns Observable<GrpcEvent<thisProto.Event>>
+     * @returns Observable<GrpcEvent<onlineNiepowazniPoker002.Event>>
      */
     observeEvents: (
-      requestData: thisProto.PokerGameHello,
+      requestData: onlineNiepowazniPoker001.PokerGameHello,
       requestMetadata = new GrpcMetadata()
-    ): Observable<GrpcEvent<thisProto.Event>> => {
+    ): Observable<GrpcEvent<onlineNiepowazniPoker002.Event>> => {
       return this.handler.handle({
         type: GrpcCallType.serverStream,
         client: this.client,
         path: '/online.niepowazni.poker.PokerGameService/observeEvents',
         requestData,
         requestMetadata,
-        requestClass: thisProto.PokerGameHello,
-        responseClass: thisProto.Event
+        requestClass: onlineNiepowazniPoker001.PokerGameHello,
+        responseClass: onlineNiepowazniPoker002.Event
+      });
+    },
+    /**
+     * Unary call: /online.niepowazni.poker.PokerGameService/perform
+     *
+     * @param requestMessage Request message
+     * @param requestMetadata Request metadata
+     * @returns Observable<GrpcEvent<onlineNiepowazniPoker001.GameActionResponse>>
+     */
+    perform: (
+      requestData: onlineNiepowazniPoker001.GameAction,
+      requestMetadata = new GrpcMetadata()
+    ): Observable<GrpcEvent<onlineNiepowazniPoker001.GameActionResponse>> => {
+      return this.handler.handle({
+        type: GrpcCallType.unary,
+        client: this.client,
+        path: '/online.niepowazni.poker.PokerGameService/perform',
+        requestData,
+        requestMetadata,
+        requestClass: onlineNiepowazniPoker001.GameAction,
+        responseClass: onlineNiepowazniPoker001.GameActionResponse
       });
     }
   };
@@ -73,14 +97,30 @@ export class PokerGameServiceClient {
    *
    * @param requestMessage Request message
    * @param requestMetadata Request metadata
-   * @returns Observable<thisProto.Event>
+   * @returns Observable<onlineNiepowazniPoker002.Event>
    */
   observeEvents(
-    requestData: thisProto.PokerGameHello,
+    requestData: onlineNiepowazniPoker001.PokerGameHello,
     requestMetadata = new GrpcMetadata()
-  ): Observable<thisProto.Event> {
+  ): Observable<onlineNiepowazniPoker002.Event> {
     return this.$raw
       .observeEvents(requestData, requestMetadata)
+      .pipe(throwStatusErrors(), takeMessages());
+  }
+
+  /**
+   * Unary call @/online.niepowazni.poker.PokerGameService/perform
+   *
+   * @param requestMessage Request message
+   * @param requestMetadata Request metadata
+   * @returns Observable<onlineNiepowazniPoker001.GameActionResponse>
+   */
+  perform(
+    requestData: onlineNiepowazniPoker001.GameAction,
+    requestMetadata = new GrpcMetadata()
+  ): Observable<onlineNiepowazniPoker001.GameActionResponse> {
+    return this.$raw
+      .perform(requestData, requestMetadata)
       .pipe(throwStatusErrors(), takeMessages());
   }
 }
