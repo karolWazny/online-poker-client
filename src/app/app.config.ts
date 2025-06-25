@@ -6,6 +6,7 @@ import {provideHttpClient} from '@angular/common/http';
 import {GrpcCoreModule} from '@ngx-grpc/core';
 import {GrpcWebClientModule} from '@ngx-grpc/grpc-web-client';
 import { provideStore } from '@ngrx/store';
+import {loginReducer} from './security/security.reducers';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,6 +19,8 @@ export const appConfig: ApplicationConfig = {
             host: 'http://localhost:8080'
         }
     })),
-    provideStore()
+    provideStore({
+      login: loginReducer
+    })
 ]
 };

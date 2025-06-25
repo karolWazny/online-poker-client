@@ -1,0 +1,18 @@
+<mat-card style="width: 36rem; margin: 10rem auto auto;">
+  <mat-card-header>
+    <span>Log In</span>
+  </mat-card-header>
+  <mat-card-content>
+    <section style="display: flex;flex-direction: column;gap: 0.5rem" [formGroup]="loginForm">
+      <mat-form-field>
+        <mat-label>Username</mat-label>
+        <input matInput formControlName="username">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Password</mat-label>
+        <input matInput type="password" formControlName="password">
+      </mat-form-field>
+      <button mat-raised-button (click)="logIn()">Log In</button>
+    </section>
+  </mat-card-content>
+</mat-card>
