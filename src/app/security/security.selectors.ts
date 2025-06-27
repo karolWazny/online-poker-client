@@ -13,3 +13,8 @@ export const selectUsername = createSelector(
   (state: AppState) => state.login,
   (state) => state.username
 )
+
+export const selectToken = createSelector(
+  (state: AppState)=> state.login,
+  (loginState) => loginState.token
+)

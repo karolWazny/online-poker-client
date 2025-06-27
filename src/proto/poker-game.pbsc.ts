@@ -78,6 +78,29 @@ export class PokerGameServiceClient {
         requestClass: onlineNiepowazniPoker001.GameAction,
         responseClass: onlineNiepowazniPoker001.GameActionResponse
       });
+    },
+    /**
+     * Unary call: /online.niepowazni.poker.PokerGameService/join
+     *
+     * @param requestMessage Request message
+     * @param requestMetadata Request metadata
+     * @returns Observable<GrpcEvent<onlineNiepowazniPoker001.JoinPokerGameResponse>>
+     */
+    join: (
+      requestData: onlineNiepowazniPoker001.JoinPokerGameRequest,
+      requestMetadata = new GrpcMetadata()
+    ): Observable<
+      GrpcEvent<onlineNiepowazniPoker001.JoinPokerGameResponse>
+    > => {
+      return this.handler.handle({
+        type: GrpcCallType.unary,
+        client: this.client,
+        path: '/online.niepowazni.poker.PokerGameService/join',
+        requestData,
+        requestMetadata,
+        requestClass: onlineNiepowazniPoker001.JoinPokerGameRequest,
+        responseClass: onlineNiepowazniPoker001.JoinPokerGameResponse
+      });
     }
   };
 
@@ -121,6 +144,22 @@ export class PokerGameServiceClient {
   ): Observable<onlineNiepowazniPoker001.GameActionResponse> {
     return this.$raw
       .perform(requestData, requestMetadata)
+      .pipe(throwStatusErrors(), takeMessages());
+  }
+
+  /**
+   * Unary call @/online.niepowazni.poker.PokerGameService/join
+   *
+   * @param requestMessage Request message
+   * @param requestMetadata Request metadata
+   * @returns Observable<onlineNiepowazniPoker001.JoinPokerGameResponse>
+   */
+  join(
+    requestData: onlineNiepowazniPoker001.JoinPokerGameRequest,
+    requestMetadata = new GrpcMetadata()
+  ): Observable<onlineNiepowazniPoker001.JoinPokerGameResponse> {
+    return this.$raw
+      .join(requestData, requestMetadata)
       .pipe(throwStatusErrors(), takeMessages());
   }
 }

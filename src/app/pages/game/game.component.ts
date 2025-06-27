@@ -1,18 +1,17 @@
 import {AfterViewInit, Component, OnDestroy} from '@angular/core';
 import {PlayingCardWrapperComponent} from '../../playing-card-wrapper/playing-card-wrapper.component';
-import {debounceTime, merge, Subject, Subscription} from 'rxjs';
-import {PokerGameServiceClient} from '../../../proto/poker-game.pbsc';
+import {debounceTime, merge, Subject, Subscription, take} from 'rxjs';
 import {Event, GameEventType} from '../../../proto/poker-event-model.pb';
 import {MessageType} from '../../../proto/poker-common-model.pb';
 import {CardDto} from '../../model/card-dto';
-import {GrpcMetadata} from '@ngx-grpc/common';
-import {PokerGameHello} from '../../../proto/poker-action-model.pb';
 import {MatFormField, MatLabel} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
-import {FormControl, ReactiveFormsModule} from '@angular/forms';
+import {ReactiveFormsModule} from '@angular/forms';
 import {MatButton} from '@angular/material/button';
 import {MatSlider, MatSliderThumb} from '@angular/material/slider';
 import {PokerPlayer} from '../../model/poker-player';
+import {AuthService} from '../../services/auth.service';
+import {PokerGameService} from '../../services/poker-game.service';
 
 @Component({
   selector: 'app-game',
@@ -26,15 +25,10 @@ export class GameComponent implements AfterViewInit, OnDestroy {
   $pingTimeoutSubject: Subject<string> = new Subject<string>();
 
   board: CardDto[] = []
-  players: PokerPlayer[] = [{
-    username: 'villain',
-    stack: 2500,
-    pot: 0
-  }]
+  players: PokerPlayer[] = []
 
-  usernameFormField = new FormControl('')
-
-  constructor(private gameServiceClient: PokerGameServiceClient) {
+  constructor(private authService: AuthService,
+              private pokerGameService: PokerGameService) {
   }
 
   ngOnDestroy(): void {
@@ -44,7 +38,7 @@ export class GameComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     merge(this.$pingTimeoutSubject
-      .pipe(debounceTime(5000)), this.usernameFormField.valueChanges.pipe(debounceTime(3000)))
+      .pipe(debounceTime(5000)))
       .subscribe({
         next: _ => {
           console.log('connection lost...')
@@ -56,10 +50,7 @@ export class GameComponent implements AfterViewInit, OnDestroy {
   }
 
   private getGameSubscription() {
-    console.log('connecting...')
-    let metadata = new GrpcMetadata();
-    metadata.set("Authorization", "Bearer " + this.getHeroLogin())
-    this.$gameEventsSubscription =  this.gameServiceClient.observeEvents(new PokerGameHello(), metadata)
+    this.$gameEventsSubscription = this.pokerGameService.observeEvents()
       .subscribe({
         next: value => this.handleGameEvent(value)
       });
@@ -78,26 +69,25 @@ export class GameComponent implements AfterViewInit, OnDestroy {
         })
       })
     } else if (value.eventData?.gameEventType === GameEventType.PLAYER_JOINED) {
-      let username = value.eventData?.newPlayerData?.username || '';
-      if (!username) return;
-      let updatedPlayerNames = value.eventData?.newPlayerData?.updatedPlayersList || [];
-      if (!updatedPlayerNames) return;
-      let buyIn = Number.parseInt(value.eventData?.newPlayerData?.buyIn || '0');
-      let heroIndex = updatedPlayerNames.findIndex((username) => {
-        return username === this.getHeroLogin()
+      this.authService.getUsername$().pipe(take(1)).subscribe(heroLogin => {
+        let username = value.eventData?.newPlayerData?.username || '';
+        if (!username) return;
+        let updatedPlayerNames = value.eventData?.newPlayerData?.updatedPlayersList || [];
+        if (!updatedPlayerNames) return;
+        let buyIn = Number.parseInt(value.eventData?.newPlayerData?.buyIn || '0');
+        let heroIndex = updatedPlayerNames.findIndex(async (username) => {
+          return username === heroLogin
+        })
+        console.log(heroIndex)
+        updatedPlayerNames = updatedPlayerNames.slice(heroIndex).concat(updatedPlayerNames.slice(0, heroIndex))
+        updatedPlayerNames = updatedPlayerNames.slice(1)
+        let newPlayerIndex = updatedPlayerNames.findIndex(async (username) => {
+          return username === heroLogin
+        })
+        this.players = this.players.slice(0, newPlayerIndex)
+          .concat([{username: username, pot: 0, stack: buyIn}])
+          .concat(this.players.slice(newPlayerIndex))
       })
-      updatedPlayerNames = updatedPlayerNames.slice(heroIndex).concat(updatedPlayerNames.slice(0, heroIndex))
-      updatedPlayerNames = updatedPlayerNames.slice(1)
-      let newPlayerIndex = updatedPlayerNames.findIndex((username) => {
-        return username === this.getHeroLogin()
-      })
-      this.players = this.players.slice(0, newPlayerIndex)
-        .concat([{username: username, pot: 0, stack: buyIn}])
-        .concat(this.players.slice(newPlayerIndex))
     }
-  }
-
-  private getHeroLogin() {
-    return this.usernameFormField.value;
   }
 }
